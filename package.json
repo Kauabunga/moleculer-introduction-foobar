@@ -3,16 +3,13 @@
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
   "scripts": {
-    "dev": "moleculer-runner --repl --hot services/**/*.service.js",
+    "dev": "node ./bin/www",
     "start": "moleculer-runner",
-    "cli": "moleculer connect ",
-    "ci": "jest --watch",
-    "test": "jest --coverage",
+    "cli": "moleculer connect",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:report": "npx http-server coverage/lcov-report -p 5000 -o",
-    "lint": "eslint services",
-    "dc:up": "docker-compose up --build -d",
-    "dc:logs": "docker-compose logs -f",
-    "dc:down": "docker-compose down"
+    "lint": "eslint services"
   },
   "keywords": [
     "microservices",
@@ -23,16 +20,18 @@
     "eslint": "^7.7.0",
     "jest": "^26.4.2",
     "jest-cli": "^26.4.2",
+    "jest-fetch-mock": "^3.0.3",
     "moleculer-repl": "^0.6.4",
     "supertest": "^6.0.1"
   },
   "dependencies": {
     "express": "^4.17.1",
     "moleculer": "^0.14.10",
-    "moleculer-web": "^0.9.0"
+    "moleculer-web": "^0.9.0",
+    "node-fetch": "^2.6.1"
   },
   "engines": {
-    "node": ">= 10.x.x"
+    "node": ">= 14.x.x"
   },
   "jest": {
     "coverageDirectory": "../coverage",

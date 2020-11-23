@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+const express = require('express');
+const { PORT } = require('../config');
+
+// Definition
+const APP_NAME = 'OpenbankingMiddleware';
+
+console.time(`Setup ${APP_NAME}`); // eslint-disable-line
+const { setup } = require('../index');
+
+const app = express();
+const [broker, service] = setup({ server: false });
+
+console.timeEnd(`Setup ${APP_NAME}`); // eslint-disable-line
+console.time(`Starting ${APP_NAME}`); // eslint-disable-line
+
+broker
+  .start()
+  .then(() => {
+    console.log(`🚀 Deployment ${APP_NAME} broker started`); // eslint-disable-line
+
+    app.disable('x-powered-by');
+    app.use(service.express());
+    app.listen(PORT, (err) => {
+      if (err) {
+        throw err;
+      }
+
+      console.timeEnd(`Starting ${APP_NAME}`); // eslint-disable-line
+      console.log(`🚀 Deployment ${APP_NAME} listening on the port ${RESOLVED_PORT}`); // eslint-disable-line
+    });
+  })
+  .catch((err) => {
+    console.error(`Fatal Error starting ${APP_NAME} broker`); // eslint-disable-line
+    console.timeEnd(`Starting ${APP_NAME}`); // eslint-disable-line
+    console.error(`Fatal Error starting ${APP_NAME} broker`, err); // eslint-disable-line
+
+    process.exit(1);
+  });
