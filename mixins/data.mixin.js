@@ -1,5 +1,5 @@
-const fetch = require("node-fetch");
-const { MoleculerClientError } = require("moleculer").Errors;
+const fetch = require('node-fetch');
+const { MoleculerClientError } = require('moleculer').Errors;
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -14,13 +14,8 @@ module.exports = {
 					.then((response) => this.parseResponse(response))
 					.catch((err) => this.handleError(err));
 			} catch (err) {
-				this.logger.error("Error while performing http request", err);
-				return Promise.reject(
-					new MoleculerClientError(
-						`Http Adapter invalid response`,
-						500
-					)
-				);
+				this.logger.error('Error while performing http request', err);
+				return Promise.reject(new MoleculerClientError(`Http Adapter invalid response`, 500));
 			}
 		},
 
@@ -32,10 +27,7 @@ module.exports = {
 				return res;
 			}
 
-			throw new MoleculerClientError(
-				`Http Adapter request ${res.status}:${res.statusText}`,
-				res.status
-			);
+			throw new MoleculerClientError(`Http Adapter request ${res.status}:${res.statusText}`, res.status);
 		},
 
 		/**
@@ -46,11 +38,8 @@ module.exports = {
 				const data = await res.json();
 				return data;
 			} catch (err) {
-				this.logger.error("Error while parsing response.json()", err);
-				throw new MoleculerClientError(
-					`Http Adapter invalid json response`,
-					500
-				);
+				this.logger.error('Error while parsing response.json()', err);
+				throw new MoleculerClientError(`Http Adapter invalid json response`, 500);
 			}
 		},
 
@@ -58,8 +47,8 @@ module.exports = {
 		 * Handle error
 		 */
 		handleError(err) {
-			this.logger.error("Http Adapter had fatal error", err);
-			throw new MoleculerClientError("Http Adapter failed", 500);
+			this.logger.error('Http Adapter had fatal error', err);
+			throw new MoleculerClientError('Http Adapter failed', 500);
 		},
 	},
 };

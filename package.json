@@ -9,29 +9,50 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:report": "npx http-server coverage/lcov-report -p 5000 -o",
-    "lint": "eslint services"
+    "lint": "eslint ."
   },
   "keywords": [
     "microservices",
     "moleculer"
   ],
-  "author": "",
-  "devDependencies": {
-    "eslint": "^7.7.0",
-    "jest": "^26.4.2",
-    "jest-cli": "^26.4.2",
-    "jest-fetch-mock": "^3.0.3",
-    "moleculer-repl": "^0.6.4",
-    "supertest": "^6.0.1"
-  },
+  "author": "Kauabunga",
   "dependencies": {
     "express": "^4.17.1",
     "moleculer": "^0.14.10",
     "moleculer-web": "^0.9.0",
     "node-fetch": "^2.6.1"
   },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "jest": "^26.4.2",
+    "jest-cli": "^26.4.2",
+    "jest-fetch-mock": "^3.0.3",
+    "lint-staged": "^10.5.1",
+    "moleculer-repl": "^0.6.4",
+    "prettier": "^2.2.0",
+    "supertest": "^6.0.1"
+  },
   "engines": {
     "node": ">= 14.x.x"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": true
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint . --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "jest": {
     "coverageDirectory": "../coverage",

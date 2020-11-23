@@ -1,12 +1,12 @@
-const DataMixin = require("../mixins/data.mixin");
-const { HOST_DATA_ACCOUNTS } = require("../config");
+const DataMixin = require('../mixins/data.mixin');
+const { HOST_DATA_ACCOUNTS } = require('../config');
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
 
 module.exports = {
-	name: "data-accounts",
+	name: 'data-accounts',
 	settings: {
 		urls: {
 			list: `${HOST_DATA_ACCOUNTS}/45d38a5b-2a0f-468b-bfcc-7e17b9053082`,
@@ -34,7 +34,7 @@ module.exports = {
 		 */
 		get: {
 			params: {
-				id: "string",
+				id: 'string',
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {

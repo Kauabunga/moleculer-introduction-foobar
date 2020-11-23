@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-	name: "greeter",
+	name: 'greeter',
 
 	/**
 	 * Settings
@@ -26,7 +26,7 @@ module.exports = {
 		 */
 		hello: {
 			async handler() {
-				return "Hello Moleculer";
+				return 'Hello Moleculer';
 			},
 		},
 
@@ -37,7 +37,7 @@ module.exports = {
 		 */
 		welcome: {
 			params: {
-				name: "string",
+				name: 'string',
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {

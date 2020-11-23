@@ -3,14 +3,14 @@
  */
 
 module.exports = {
-	name: "accounts",
+	name: 'accounts',
 	actions: {
 		/**
 		 * Get all accounts
 		 */
 		list: {
 			async handler(ctx) {
-				return ctx.call("data-accounts.list");
+				return ctx.call('data-accounts.list');
 			},
 		},
 
@@ -21,11 +21,11 @@ module.exports = {
 		 */
 		get: {
 			params: {
-				id: "string",
+				id: 'string',
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {
-				return ctx.call("data-accounts.get", { id: ctx.params.id });
+				return ctx.call('data-accounts.get', { id: ctx.params.id });
 			},
 		},
 	},

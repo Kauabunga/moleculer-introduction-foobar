@@ -1,9 +1,9 @@
-const { ServiceBroker } = require("moleculer");
+const { ServiceBroker } = require('moleculer');
 
-const ApiService = require("./services/api.service");
-const GreeterService = require("./services/greeter.service");
-const AccountsService = require("./services/accounts.service");
-const AccountsDataService = require("./services/accounts-data.service");
+const ApiService = require('./services/api.service');
+const GreeterService = require('./services/greeter.service');
+const AccountsService = require('./services/accounts.service');
+const AccountsDataService = require('./services/accounts-data.service');
 
 exports.setup = (brokerSettings) => {
 	const broker = new ServiceBroker(brokerSettings);

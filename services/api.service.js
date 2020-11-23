@@ -1,6 +1,6 @@
-const ApiGateway = require("moleculer-web");
+const ApiGateway = require('moleculer-web');
 
-const { PORT } = require("../config");
+const { PORT } = require('../config');
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -9,36 +9,36 @@ const { PORT } = require("../config");
  */
 
 module.exports = {
-	name: "api",
+	name: 'api',
 	mixins: [ApiGateway],
 
 	// More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html
 	settings: {
 		port: PORT,
 		log4XXResponses: false,
-		logRequestParams: "info",
-		logResponseData: "info",
+		logRequestParams: 'info',
+		logResponseData: 'info',
 
 		routes: [
 			{
-				path: "/api",
+				path: '/api',
 				authentication: true,
 				authorization: true,
-				mappingPolicy: "restrict",
+				mappingPolicy: 'restrict',
 				logging: true,
 
 				aliases: {
-					"GET /greeter/hello": "greeter.hello",
-					"GET /greeter/welcome": "greeter.welcome",
+					'GET /greeter/hello': 'greeter.hello',
+					'GET /greeter/welcome': 'greeter.welcome',
 
-					"GET /accounts": "accounts.list",
-					"GET /accounts/:id": "accounts.get",
+					'GET /accounts': 'accounts.list',
+					'GET /accounts/:id': 'accounts.get',
 				},
 			},
 		],
 
 		onError(req, res, err) {
-			this.logger.error("Error occurred in gateway!", err);
+			this.logger.error('Error occurred in gateway!', err);
 
 			const resolvedStatus = err.code || 500;
 
@@ -64,20 +64,18 @@ module.exports = {
 		 */
 		async authenticate(ctx, route, req) {
 			// Read the token from header
-			const auth = req.headers["authorization"];
+			const auth = req.headers['authorization'];
 
-			if (auth && auth.startsWith("Bearer")) {
+			if (auth && auth.startsWith('Bearer')) {
 				const token = auth.slice(7);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
+				if (token == '123456') {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
-					return { id: 1, name: "John Doe" };
+					return { id: 1, name: 'John Doe' };
 				} else {
 					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(
-						ApiGateway.Errors.ERR_INVALID_TOKEN
-					);
+					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
 				}
 			} else {
 				// No token. Throw an error or do nothing if anonymous access is allowed.
@@ -102,9 +100,7 @@ module.exports = {
 
 			// It check the `auth` property in action schema.
 			if (!user) {
-				return Promise.reject(
-					new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS")
-				);
+				return Promise.reject(new ApiGateway.Errors.UnAuthorizedError('NO_RIGHTS'));
 			}
 		},
 	},
