@@ -9,12 +9,10 @@ const fetch = require('node-fetch');
 describe("Test 'data' mixin", () => {
 	let broker = new ServiceBroker({ logger: false });
 
-	broker.createService({
+	const service = broker.createService({
 		name: 'test-service',
 		mixins: [TestMixin],
 	});
-
-	const service = broker.getLocalService('test-service');
 
 	beforeAll(() => broker.start());
 	afterAll(() => broker.stop());

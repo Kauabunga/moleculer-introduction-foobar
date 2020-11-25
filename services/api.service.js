@@ -1,4 +1,7 @@
 const ApiGateway = require('moleculer-web');
+const hpp = require('hpp'); // HTTP Parameter Pollution attacks
+const helmet = require('helmet'); // HTTP Security
+const { UnAuthorizedError, ERR_INVALID_TOKEN, ERR_NO_TOKEN } = require('moleculer-web').Errors;
 
 const { PORT } = require('../config');
 
@@ -19,7 +22,22 @@ module.exports = {
 		logRequestParams: 'info',
 		logResponseData: 'info',
 
+		middleware: [hpp(), helmet.noSniff(), helmet.hidePoweredBy()],
+
 		routes: [
+			{
+				path: '/',
+				authentication: false,
+				authorization: false,
+				mappingPolicy: 'restrict',
+				logging: true,
+
+				aliases: {
+					'GET /health': 'api.health',
+					'GET /liveness_check': 'api.health',
+					'GET /readiness_check': 'api.readiness',
+				},
+			},
 			{
 				path: '/api',
 				authentication: true,
@@ -28,9 +46,6 @@ module.exports = {
 				logging: true,
 
 				aliases: {
-					'GET /greeter/hello': 'greeter.hello',
-					'GET /greeter/welcome': 'greeter.welcome',
-
 					'GET /accounts': 'accounts.list',
 					'GET /accounts/:id': 'accounts.get',
 				},
@@ -49,13 +64,25 @@ module.exports = {
 		},
 	},
 
+	actions: {
+		health: {
+			async handler(ctx) {
+				return ctx.call('$node.health');
+			},
+		},
+		readiness: {
+			async handler(ctx) {
+				// NOTE: Would be good to verify connection to datastores / authentication services
+				return ctx.call('$node.health');
+			},
+		},
+	},
+
 	methods: {
 		/**
 		 * Authenticate the request. It check the `Authorization` token value in the request header.
 		 * Check the token value & resolve the user by the token.
 		 * The resolved user will be available in `ctx.meta.user`
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
 		 *
 		 * @param {Context} ctx
 		 * @param {Object} route
@@ -75,19 +102,16 @@ module.exports = {
 					return { id: 1, name: 'John Doe' };
 				} else {
 					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
+					throw new UnAuthorizedError(ERR_INVALID_TOKEN);
 				}
-			} else {
-				// No token. Throw an error or do nothing if anonymous access is allowed.
-				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
-				return null;
 			}
+
+			// No token. Throw an error or do nothing if anonymous access is allowed.
+			throw new UnAuthorizedError(ERR_NO_TOKEN);
 		},
 
 		/**
 		 * Authorize the request. Check that the authenticated user has right to access the resource.
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
 		 *
 		 * @param {Context} ctx
 		 * @param {Object} route
@@ -96,11 +120,11 @@ module.exports = {
 		 */
 		async authorize(ctx, route, req) {
 			// Get the authenticated user.
-			const user = ctx.meta.user;
+			const { user } = ctx.meta;
 
 			// It check the `auth` property in action schema.
 			if (!user) {
-				return Promise.reject(new ApiGateway.Errors.UnAuthorizedError('NO_RIGHTS'));
+				return Promise.reject(new UnAuthorizedError('NO_RIGHTS'));
 			}
 		},
 	},

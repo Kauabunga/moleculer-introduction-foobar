@@ -6,7 +6,7 @@ const express = require('express');
 const { setup } = require('../../index');
 
 describe("Test 'accounts' service", () => {
-	const [broker, gatewayService] = setup();
+	const [broker, gatewayService] = setup({ server: false });
 	const app = express();
 
 	app.use('/', gatewayService.express());
@@ -50,6 +50,14 @@ describe("Test 'accounts' service", () => {
 			expect(mockResponseFn).toHaveBeenCalled();
 			expect(mockResponseFn).toHaveBeenCalledWith('https://run.mocky.io/v3/45d38a5b-2a0f-468b-bfcc-7e17b9053082', {});
 		});
+
+		it('should fail with a 401 when there is no bearer token', async () => {
+			await request(app).get('/api/accounts').expect(401);
+		});
+
+		it('should fail with a 401 when the bearer token is invalid', async () => {
+			await request(app).get('/api/accounts').set('Authorization', 'Bearer INVALID_TOKEN').expect(401);
+		});
 	});
 
 	describe("Test 'GET /accounts/:id' api", () => {
@@ -87,6 +95,14 @@ describe("Test 'accounts' service", () => {
 
 			expect(mockResponseFn).toHaveBeenCalled();
 			expect(mockResponseFn).toHaveBeenCalledWith('https://run.mocky.io/v3/d61ee02f-ba20-45a3-b76e-8e827498ca14', {});
+		});
+
+		it('should fail with a 401 when there is no bearer token', async () => {
+			await request(app).get('/api/accounts/ACCOUNT_ID').expect(401);
+		});
+
+		it('should fail with a 401 when the bearer token is invalid', async () => {
+			await request(app).get('/api/accounts/ACCOUNT_ID').set('Authorization', 'Bearer INVALID_TOKEN').expect(401);
 		});
 	});
 });
