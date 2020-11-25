@@ -64,10 +64,14 @@ module.exports = {
 	/**
 	 * Service started lifecycle event handler
 	 */
-	async started() {},
+	async started() {
+		this.logger.info('Started greeter service');
+	},
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	async stopped() {},
+	async stopped() {
+		this.logger.info('Stopped greeter service');
+	},
 };

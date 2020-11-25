@@ -91,19 +91,19 @@ module.exports = {
 		 */
 		async authenticate(ctx, route, req) {
 			// Read the token from header
-			const auth = req.headers['authorization'];
+			const auth = req.get('authorization');
 
 			if (auth && auth.startsWith('Bearer')) {
 				const token = auth.slice(7);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == '123456') {
+				if (token === '123456') {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return { id: 1, name: 'John Doe' };
-				} else {
-					// Invalid token
-					throw new UnAuthorizedError(ERR_INVALID_TOKEN);
 				}
+
+				// Invalid token
+				throw new UnAuthorizedError(ERR_INVALID_TOKEN);
 			}
 
 			// No token. Throw an error or do nothing if anonymous access is allowed.
@@ -126,6 +126,8 @@ module.exports = {
 			if (!user) {
 				return Promise.reject(new UnAuthorizedError('NO_RIGHTS'));
 			}
+
+			return Promise.resolve();
 		},
 	},
 };

@@ -1,13 +1,12 @@
 require('jest-fetch-mock').enableMocks();
 
+const fetch = require('node-fetch');
 const { ServiceBroker } = require('moleculer');
 const { MoleculerClientError } = require('moleculer').Errors;
 const TestMixin = require('../../../mixins/data.mixin');
 
-const fetch = require('node-fetch');
-
 describe("Test 'data' mixin", () => {
-	let broker = new ServiceBroker({ logger: false });
+	const broker = new ServiceBroker({ logger: false });
 
 	const service = broker.createService({
 		name: 'test-service',
