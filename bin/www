@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-const { PORT } = require('../config');
-const { startHttpBroker } = require('../lib/broker/start');
+const { PORT } = require('../src/config');
+const { startHttpBroker } = require('../src/lib/broker/start');
 
 const appName = 'Accounts Service';
 const port = PORT || 3000;
 
-const { setup } = require('../index');
+const { setup } = require('../src/index');
 
 const [broker, gatewayService] = setup({ server: false });
 
